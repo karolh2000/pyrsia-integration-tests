@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+setup_file() {
+  load 'common-setup'
+  _common_setup_file
+}
+
+teardown_file() {
+  load 'common-setup'
+  _common_teardown_file
+}
+
+setup() {
+    load 'common-setup'
+    _common_setup
+}
+
+@test "Testing pyrsia node, maven build system." {
+ # TBD
+}
+
+

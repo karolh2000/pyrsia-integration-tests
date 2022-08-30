@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 
+COMMON_SETUP='common-setup'
+
 setup_file() {
-  load 'common-setup'
+  load $COMMON_SETUP
   _common_setup_file "$PYRSIA_TEMP_DIR"
 }
 
 teardown_file() {
-  load 'common-setup'
+  load $COMMON_SETUP
   _common_teardown_file
 }
 
 setup() {
-    load 'common-setup'
+    load $COMMON_SETUP
     _common_setup
 }
 
@@ -20,7 +22,7 @@ setup() {
   run "$PYRSIA_TARGET_DIR"/pyrsia help
 
   #echo "$output" >&3
-  # check if pyrsia ping returns errors
+  # check if pyrsia help shows
   assert_output --partial 'USAGE:'
   assert_output --partial 'OPTIONS:'
   assert_output --partial 'SUBCOMMANDS:'
@@ -35,7 +37,7 @@ setup() {
 }
 
 @test "Testing pyrsia STATUS, check if the node is connected to peers." {
-  # run pyrsia ping
+  # run pyrsia status
   run "$PYRSIA_TARGET_DIR"/pyrsia status
   # echo "\n $output" >&3
   # check if pyrsia ping returns errors

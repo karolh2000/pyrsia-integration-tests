@@ -2,6 +2,7 @@ services:
   node_with_build_service:
     image: pyrsia/node_with_build_service
     build:
+      context: .
       target: node_with_build_service
     command: [/src/entrypoint.sh]
     stdin_open: true

@@ -30,9 +30,9 @@ _common_setup_file() {
   cargo build --profile=release --package=pyrsia_cli --manifest-path=$PYRSIA_TEMP_DIR/Cargo.toml
   echo "Building Pyrsia completed!" >&3
   echo "Building the node docker image and starting the container, it might take a while..." >&3
-  #docker-compose -f $PYRSIA_TEMP_DIR/docker-compose.yml up -d
-  docker-compose -f $1/docker-compose.yml up -d
-  sleep 10
+  DOCKER_COMPOSE_DIR=$1;
+  docker-compose -f $DOCKER_COMPOSE_DIR/docker-compose.yml up -d
+  sleep 20
   echo "Node docker container is up!" >&3
   echo "The tests environment is ready!" >&3
   echo "Running tests..." >&3
@@ -49,7 +49,7 @@ _common_teardown_file() {
     rm -rf "$PYRSIA_TEMP_DIR"
   else
     echo "Stopping the docker containters (containers and images not removed)" >&3
-    docker-compose -f /tmp/pyrsia/docker-compose.yml stop >&3
+    docker-compose -f $DOCKER_COMPOSE_DIR/docker-compose.yml stop >&3
     echo "The test temp files not removed!"  >&3
     echo "The docker images/containers and temp dir wad not removed because 'CLEAN_UP_TEST_ENVIROMENT = $CLEAN_UP_TEST_ENVIROMENT'"  >&3
   fi

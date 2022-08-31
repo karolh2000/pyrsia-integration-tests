@@ -10,8 +10,8 @@ RUN git clone https://github.com/tiainen/pyrsia_build_pipeline_prototype.git
 WORKDIR /src/pyrsia_build_pipeline_prototype
 RUN PATH="$HOME/.cargo/bin:$PATH" RUST_LOG=debug cargo build
 WORKDIR /src
-COPY entrypoint.sh ./ 
-RUN chmod +x ./entrypoint.sh
+COPY entrypoint_bootstrap.sh entrypoint_single_node_build_service.sh ./
+RUN chmod +x ./*.sh
 RUN git clone -b 954-docker-docs  https://github.com/erwin1/pyrsia.git
 WORKDIR /src/pyrsia
 RUN PATH="$HOME/.cargo/bin:$PATH" RUST_LOG=debug cargo build --package=pyrsia_node

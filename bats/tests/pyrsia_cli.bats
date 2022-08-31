@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
 COMMON_SETUP='common-setup'
+DOCKER_COMPOSE_DIR="$(pwd)/tests/resources/docker/docker-compose_bootstrap.yml"
 
 setup_file() {
   load $COMMON_SETUP
-  _common_setup_file "$PYRSIA_TEMP_DIR"
+  _common_setup_file "$DOCKER_COMPOSE_DIR"
 }
 
 teardown_file() {

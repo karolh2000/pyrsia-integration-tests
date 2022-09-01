@@ -27,8 +27,8 @@ setup() {
 @test "Testing the build service, maven (build, inspect-log)." {
   # TODO Enable this part when the issue is fixed
   # the build request should fail on the non existing maven mapping ID
-  # run run "$PYRSIA_CLI" build maven --gav "FAKE_MAVEN_MAPPING"
-  # refute_output --partial  "successfully"
+   run run "$PYRSIA_CLI" build maven --gav "FAKE_MAVEN_MAPPING"
+   refute_output --partial  "successfully"
 
   # confirm the artifact is not already added to pyrsia node
   run "$PYRSIA_CLI" inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID

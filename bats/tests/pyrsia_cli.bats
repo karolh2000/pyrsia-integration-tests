@@ -21,9 +21,7 @@ setup() {
 @test "Testing pyrsia HELP, check if the help is shown." {
   # run pyrsia help
   run "$PYRSIA_TARGET_DIR"/pyrsia help
-
-  #echo "$output" >&3
-  # check if pyrsia help shows
+  # check if pyrsia help is shown
   assert_output --partial 'USAGE:'
   assert_output --partial 'OPTIONS:'
   assert_output --partial 'SUBCOMMANDS:'
@@ -32,7 +30,6 @@ setup() {
 @test "Testing pyrsia PING, check if the node is up and reachable." {
   # run pyrsia ping
   run "$PYRSIA_TARGET_DIR"/pyrsia ping
-  #echo "$output" >&3
   # check if pyrsia ping returns errors
   refute_output --partial 'Error'
 }
@@ -40,22 +37,24 @@ setup() {
 @test "Testing pyrsia STATUS, check if the node is connected to peers." {
   # run pyrsia status
   run "$PYRSIA_TARGET_DIR"/pyrsia status
-  # echo "\n $output" >&3
-  # check if pyrsia ping returns errors
+  # check if pyrsia node has peers, fail if doesn't or error
   refute_output --partial '0'
+  refute_output --partial 'Error'
 }
 
 @test "Testing 'pyrsia LIST' CLI, check if the node returns list of peers." {
-  skip #skip this test since it's broken
-  # run pyrsia ping
+  skip
+  BATS_TEST_TIMEOUT=60
+  # skip #skip this test since it's broken
+  # run pyrsia list
   run "$PYRSIA_TARGET_DIR"/pyrsia list
-  #echo "$output" >&3
-  # check if pyrsia ping returns errors
+  # Fail if the list is empty or error
   refute_output --partial '[]'
+  refute_output --partial 'Error'
+  unset BATS_TEST_TIMEOUT
 }
 
 @test 'Pyrsia CLI CONFIG EDIT, show the config and check the values' {
-  # skip
   run "$PYRSIA_TARGET_DIR"/pyrsia config --show
   #echo "$output" >&3
   assert_output --partial 'localhost'

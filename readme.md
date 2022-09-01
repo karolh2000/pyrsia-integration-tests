@@ -1,13 +1,7 @@
 # Pyrsia Integration Tests
 ## Overview
  
-// TBD
- 
-// TODO - framework
- 
-// TODO - tests structure
- 
-// TODO - tests scope
+$REPO_DIR - the folder where the tests repo was cloned.
  
 ## How to set up and run the tests
  

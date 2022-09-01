@@ -6,6 +6,7 @@ COMMON_SETUP='common-setup'
 DOCKER_COMPOSE_DIR="$(pwd)/tests/resources/docker/docker-compose_single_node.yml"
 # maven build service mapping ID
 BUILD_SERVICE_MAVEN_MAPPING_ID="commons-codec:commons-codec:1.15"
+BUILD_SERVICE_DOCKER_MAPPING_ID="alpine:3.16"
 
 setup_file() {
   load $COMMON_SETUP
@@ -23,19 +24,11 @@ setup() {
     PYRSIA_CLI="$PYRSIA_TARGET_DIR/pyrsia"
 }
 
-@test "Testing if the node and build service is up, ping." {
-  # run pyrsia ping
-   run "$PYRSIA_CLI" ping
-   refute_output --partial 'Error'
-}
-
 @test "Testing the build service, maven (build, inspect-log)." {
-  # run pyrsia node ping
-  run "$PYRSIA_CLI" ping
-
+  # TODO Enable this part when the issue is fixed
   # the build request should fail on the non existing maven mapping ID
-#  run "$PYRSIA_TARGET_DIR"/pyrsia build maven --gav FAKE_ID
-#  refute_output --partial  "successfully"
+  # run run "$PYRSIA_CLI" build maven --gav "FAKE_MAVEN_MAPPING"
+  # refute_output --partial  "successfully"
 
   # confirm the artifact is not already added to pyrsia node
   run "$PYRSIA_CLI" inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID
@@ -46,20 +39,49 @@ setup() {
   assert_output --partial "successfully"
 
   # waiting until the build is done => inspect logs available
-  echo "A new build for $BUILD_SERVICE_MAVEN_MAPPING_ID triggered, waiting until is completed..." >&3
-  for i in {0..15..1}
+  echo -e "\t- Building $BUILD_SERVICE_MAVEN_MAPPING_ID, it might take a while..." >&3
+  for i in {0..20..1}
   do
-    echo "Still waiting for $BUILD_SERVICE_MAVEN_MAPPING_ID..." >&3
     inspect_log=$($PYRSIA_CLI inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID)
     if [[ "$inspect_log" == *"$BUILD_SERVICE_MAVEN_MAPPING_ID"* ]]; then
       break
     fi
-    sleep 10
+    sleep 5
   done
 
   #check if the logs contains the artifact info
   run echo "$inspect_log"
   assert_output --partial $BUILD_SERVICE_MAVEN_MAPPING_ID
-  echo "Maven build successful - $BUILD_SERVICE_MAVEN_MAPPING_ID" >&3
+  echo -e "\t- Maven build successful - $BUILD_SERVICE_MAVEN_MAPPING_ID" >&3
+}
+
+@test "Testing the build service, docker (build docker image, inspect-log)." {
+  # the build image request should fail on the non existing maven mapping ID
+  run "$PYRSIA_CLI" build docker --image "FAKE_IMAGE_NAME"
+  refute_output --partial  "successfully"
+
+  # confirm the artifact is not already added to pyrsia node
+  run "$PYRSIA_CLI" inspect-log docker --image $BUILD_SERVICE_DOCKER_MAPPING_ID
+  refute_output --partial $BUILD_SERVICE_DOCKER_MAPPING_ID
+
+  # init the build
+  run "$PYRSIA_CLI" build docker --image $BUILD_SERVICE_DOCKER_MAPPING_ID
+  assert_output --partial "successfully"
+
+  # waiting until the build is done => inspect logs available
+  echo -e "\t- Building docker image $BUILD_SERVICE_DOCKER_MAPPING_ID - [$PYRSIA_CLI build docker --image $BUILD_SERVICE_DOCKER_MAPPING_ID], it might take a while..." >&3
+  for i in {0..20..1}
+  do
+    inspect_log=$($PYRSIA_CLI inspect-log docker --image $BUILD_SERVICE_DOCKER_MAPPING_ID)
+    if [[ "$inspect_log" == *"$BUILD_SERVICE_DOCKER_MAPPING_ID"* ]]; then
+      break
+    fi
+    sleep 5
+  done
+
+  #check if the logs contains the artifact info
+  run echo "$inspect_log"
+  assert_output --partial $BUILD_SERVICE_DOCKER_MAPPING_ID
+  echo -e "\t- Docker image built successfully - $BUILD_SERVICE_DOCKER_MAPPING_ID" >&3
 }
 

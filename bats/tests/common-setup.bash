@@ -15,24 +15,35 @@ _common_setup() {
 
 _common_setup_file() {
   echo "Setting up the test environment..." >&3
-  local git_branch="karolh2000/integ_tests_bats"
+  # local git_branch="karolh2000/integ_tests_bats"
+  local git_branch="main"
   # clone or update the sources
   if [ -d $PYRSIA_TEMP_DIR/.git ]; then
     git --git-dir=$PYRSIA_TEMP_DIR/.git fetch
     git --git-dir=$PYRSIA_TEMP_DIR/.git --work-tree=$PYRSIA_TEMP_DIR merge origin/main
   else
     mkdir -p $PYRSIA_TEMP_DIR
-    git clone --branch $git_branch https://github.com/karolh2000/pyrsia.git $PYRSIA_TEMP_DIR
+    git clone --branch $git_branch https://github.com/pyrsia/pyrsia.git $PYRSIA_TEMP_DIR
   fi
 
   echo "Building the Pyrsia CLI sources, it might take a while..." >&3
+  echo "Pyrsia CLI source dir: $PYRSIA_TEMP_DIR"
   cargo build --profile=release --package=pyrsia_cli --manifest-path=$PYRSIA_TEMP_DIR/Cargo.toml
   echo "Building Pyrsia CLI completed!" >&3
   echo "Building the Pyrsia node docker image and starting the container, it might take a while..." >&3
   DOCKER_COMPOSE_PATH=$1;
   docker-compose -f "$DOCKER_COMPOSE_PATH" up -d >&3
-  sleep 20
-  echo "The node container is up!" >&3
+  # check periodically if the node is up (using pyrsia ping)
+  for i in {0..20..1}
+    do
+      ping_output=$("$PYRSIA_TARGET_DIR"/pyrsia ping)
+      if [[  "$ping_output" == *"Successful"* ]]; then
+        break
+      fi
+      sleep 10
+    done
+  echo "The Docker Pyrsia node container is up!" >&3
+  echo "Docker compose tests services: $(docker-compose -f "$DOCKER_COMPOSE_PATH" ps --services)"
   echo "The tests environment is ready!" >&3
   echo "Running tests..." >&3
 }

@@ -4,7 +4,7 @@ services:
     build:
       context: .
       target: node_with_build_service
-    command: [/src/entrypoint_single_node_build_service.sh]
+    command: [/src/entrypoint_listen_only_node_build_service.sh]
     stdin_open: true
     ports:
       - "8080:8080"

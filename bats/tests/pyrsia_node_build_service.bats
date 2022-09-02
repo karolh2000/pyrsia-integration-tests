@@ -3,7 +3,7 @@
 # common setup
 COMMON_SETUP='common-setup'
 # docker compose file
-DOCKER_COMPOSE_DIR="$(pwd)/tests/resources/docker/docker-compose_single_node.yml"
+DOCKER_COMPOSE_DIR="$(pwd)/tests/resources/docker/docker-compose_entrypoint_listen_only_node_build_service.yml"
 # maven build service mapping ID
 BUILD_SERVICE_MAVEN_MAPPING_ID="commons-codec:commons-codec:1.15"
 BUILD_SERVICE_DOCKER_MAPPING_ID="alpine:3.16"
@@ -22,6 +22,13 @@ setup() {
     load $COMMON_SETUP
     _common_setup
     PYRSIA_CLI="$PYRSIA_TARGET_DIR/pyrsia"
+}
+
+@test "Testing pyrsia PING, check if the node is up and reachable." {
+  # run pyrsia ping
+  run "$PYRSIA_CLI" ping
+  # check if pyrsia ping returns errors
+  refute_output --partial 'Error'
 }
 
 @test "Testing the build service, maven (build, inspect-log)." {

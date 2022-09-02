@@ -25,10 +25,11 @@ setup() {
 }
 
 @test "Testing the build service, maven (build, inspect-log)." {
-  # TODO Enable this part when the issue is fixed
+  # TODO Enable this part when #1034 the issue is fixed
+  echo -e "\t- Skipping part of this tests because of https://github.com/pyrsia/pyrsia/issues/1032" >&3
   # the build request should fail on the non existing maven mapping ID
-   run run "$PYRSIA_CLI" build maven --gav "FAKE_MAVEN_MAPPING"
-   refute_output --partial  "successfully"
+  # run "$PYRSIA_CLI" build maven --gav "FAKE_MAVEN_MAPPING"
+  # refute_output --partial  "successfully"
 
   # confirm the artifact is not already added to pyrsia node
   run "$PYRSIA_CLI" inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID
@@ -39,7 +40,7 @@ setup() {
   assert_output --partial "successfully"
 
   # waiting until the build is done => inspect logs available
-  echo -e "\t- Building $BUILD_SERVICE_MAVEN_MAPPING_ID, it might take a while..." >&3
+  echo -e "\t- Building $BUILD_SERVICE_MAVEN_MAPPING_ID - [$PYRSIA_CLI build maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID], it might take a while..." >&3
   for i in {0..20..1}
   do
     inspect_log=$($PYRSIA_CLI inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID)

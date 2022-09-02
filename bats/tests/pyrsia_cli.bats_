@@ -51,6 +51,7 @@ setup() {
 }
 
 @test "Testing 'pyrsia LIST' CLI, check if the node returns list of peers." {
+  echo -e "\t- Skipping this test because of https://github.com/pyrsia/pyrsia/issues/988" >&3
   skip
   BATS_TEST_TIMEOUT=60
   # skip #skip this test since it's broken
@@ -117,7 +118,7 @@ setup() {
   # check if the INSPECT-LOG help is shown
   assert_output --partial 'docker'
   assert_output --partial 'maven'
-
+  echo -e "\t- This test fails because of https://github.com/pyrsia/pyrsia/issues/1034" >&3
   # run pyrsia inspect log help
   run "$PYRSIA_CLI" inspect-log
   # check if the INSPECT-LOG help is shown

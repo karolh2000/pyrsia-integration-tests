@@ -5,7 +5,7 @@ PYRSIA_TEMP_DIR=/tmp/pyrsia_tests/pyrsia
 # the pyrsia binaries
 PYRSIA_TARGET_DIR=$PYRSIA_TEMP_DIR/target/release
 # if "true" then the temp files (pyrsia sources, binaries, etc.) and the docker images/containers are destroyed in "teardown_file" method.
-CLEAN_UP_TEST_ENVIRONMENT=true
+CLEAN_UP_TEST_ENVIRONMENT=false
 
 _common_setup() {
   # load the bats "extensions"
@@ -27,12 +27,11 @@ _common_setup_file() {
   fi
 
   echo "Building the Pyrsia CLI sources, it might take a while..." >&3
-  echo "Pyrsia CLI source dir: $PYRSIA_TEMP_DIR" >&3
   cargo build --profile=release --package=pyrsia_cli --manifest-path=$PYRSIA_TEMP_DIR/Cargo.toml >&3
   echo "Building Pyrsia CLI completed!" >&3
   echo "Building the Pyrsia node docker image and starting the container, it might take a while..." >&3
   DOCKER_COMPOSE_PATH=$1;
-  docker-compose -f "$DOCKER_COMPOSE_PATH" up -d >&3
+  # docker-compose -f "$DOCKER_COMPOSE_PATH" up -d >&3
   # check periodically if the node is up (using pyrsia ping)
   for i in {0..20..1}
     do
@@ -43,7 +42,6 @@ _common_setup_file() {
       sleep 10
     done
   echo "The Docker Pyrsia node container is up!" >&3
-  echo "Docker compose tests services: $(docker-compose -f "$DOCKER_COMPOSE_PATH" ps --services)"
   echo "The tests environment is ready!" >&3
   echo "Running tests..." >&3
 }

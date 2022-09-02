@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y
 RUN apt-get install build-essential libssl-dev cmake pkg-config jq openjdk-11-jdk maven -y
 RUN git clone https://github.com/tiainen/pyrsia_build_pipeline_prototype.git
 WORKDIR /src/pyrsia_build_pipeline_prototype
-RUN PATH="$HOME/.cargo/bin:$PATH" RUST_LOG=debug cargo build
+RUN cargo build
 WORKDIR /src
 COPY entrypoint_bootstrap.sh entrypoint_single_node_build_service.sh ./
 RUN chmod +x ./*.sh
-RUN git clone -b 954-docker-docs  https://github.com/erwin1/pyrsia.git
+RUN git clone https://github.com/pyrsia/pyrsia.git
 WORKDIR /src/pyrsia
-RUN PATH="$HOME/.cargo/bin:$PATH" RUST_LOG=debug cargo build --package=pyrsia_node
+RUN cargo build --package=pyrsia_node

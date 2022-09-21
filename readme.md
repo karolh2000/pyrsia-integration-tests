@@ -28,5 +28,5 @@ $ git clone --recurse-submodules https://github.com/pyrsia/pyrsia-integration-te
 Run the tests:
  
 ```sh
-$ $REPO_DIR/bats/run_tests.sh
+$ REPO_DIR=$REPO_DIR $REPO_DIR/bats/run_tests.sh
 ```

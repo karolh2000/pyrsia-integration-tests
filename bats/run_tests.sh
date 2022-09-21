@@ -7,11 +7,9 @@ if (! docker stats --no-stream ); then
 fi
 
 # identify repo path
-if [ -n "$REPO_DIR" ]; then
-  echo "Repo path REPO_DIR=$REPO_DIR"
-else
-    echo "The REPO_DIR variable is not specified, Please provide the integration tests repository path (e.g. '$HOME/pyrsia-integration-tests')."
-    exit 1
+if [ -z "$REPO_DIR" ]; then
+  echo "The REPO_DIR variable is not specified, Please provide the integration tests repository path (e.g. '$HOME/pyrsia-integration-tests')."
+  exit 1
 fi
 # export repo path (used in the tests)
 export REPO_DIR;

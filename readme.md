@@ -47,4 +47,4 @@ List of tests (scope)
      - NOTE: This test is partly disabled because of https://github.com/pyrsia/pyrsia/issues/1032
    - Test the build service, DOCKER (build docker image, inspect-log)
 3) Pyrsia P2P service, client side (project)
-   - TODO
+   - TBD

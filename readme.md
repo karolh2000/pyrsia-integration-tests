@@ -30,3 +30,21 @@ Run the tests:
 ```sh
 $ REPO_DIR=$REPO_DIR $REPO_DIR/bats/run_tests.sh
 ```
+
+List of tests (scope)
+1) Pyrsia CLI/connectivity related tests
+   - Test 'pyrsia help' CLI, check if the help is shown.
+   - Test 'pyrsia ping' CLI, check if the node is up and reachable.
+   - Test 'pyrsia status' CLI, check if the node is connected to peers.
+   - Test 'pyrsia list' CLI, check if the node returns the list of peers.
+     - NOTE: temporarily disabled with timeout, problems with P2P and listing the peer nodes
+   - Test 'pyrsia config' CLI, show the config and check the values
+   - Test 'pyrsia version' CLI, check if the CLI version shows.
+   - Test 'pyrsia build' help options CLI, check if the BUILD help is shown.
+   - Test 'pyrsia inspect-log' help/options CLI, check if the INSPECT-LOG help is shown.
+2) Pyrsia build service
+   - Test the build service, MAVEN (build, inspect-log).
+     - NOTE: This test is partly disabled because of https://github.com/pyrsia/pyrsia/issues/1032
+   - Test the build service, DOCKER (build docker image, inspect-log)
+3) Pyrsia P2P service, client side (project)
+   - TODO

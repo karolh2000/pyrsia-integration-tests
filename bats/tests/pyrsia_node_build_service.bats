@@ -24,7 +24,7 @@ setup() {
     PYRSIA_CLI="$PYRSIA_TARGET_DIR/pyrsia"
 }
 
-@test "Testing the build service, maven (build, inspect-log)." {
+@test "Testing the pyrsia node build service, maven (build java project, inspect-log)." {
   # TODO This part is disabled because of 1032
   # the build request should fail on the non existing maven mapping ID
   # run run "$PYRSIA_CLI" build maven --gav "FAKE_MAVEN_MAPPING"
@@ -41,7 +41,7 @@ setup() {
   # waiting until the build is done => inspect logs available
   echo -e "\t- Building $BUILD_SERVICE_MAVEN_MAPPING_ID, it might take a while..." >&3
   # shellcheck disable=SC2034
-  for i in {0..40}
+  for i in {0..50}
   do
     inspect_log=$($PYRSIA_CLI inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID)
     if [[ "$inspect_log" == *"$BUILD_SERVICE_MAVEN_MAPPING_ID"* ]]; then
@@ -56,7 +56,7 @@ setup() {
   echo -e "\t- Maven build successful - $BUILD_SERVICE_MAVEN_MAPPING_ID" >&3
 }
 
-@test "Testing the build service, docker (build docker image, inspect-log)." {
+@test "Testing the pyrsia node build service, docker (build docker image, inspect-log)." {
   # the build image request should fail on the non existing maven mapping ID
   run "$PYRSIA_CLI" build docker --image "FAKE_IMAGE_NAME"
   refute_output --partial  "successfully"

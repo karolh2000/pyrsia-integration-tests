@@ -52,7 +52,7 @@ setup() {
     run curl -o /dev/null --silent -Iw '%{http_code}' "$MAVEN_ARTIFACT_URL_FAKE"
     refute_output --partial '200'
 
-    echo -e "\t- Test downloading $BUILD_SERVICE_MAVEN_MAPPING_ID artifact from the pyrsia node - $MAVEN_ARTIFACT_URL_FAKE" >&3
+    echo -e "\t- Test downloading $BUILD_SERVICE_MAVEN_MAPPING_ID artifact from the pyrsia node - $MAVEN_ARTIFACT_URL" >&3
     run curl -o /dev/null --silent -Iw '%{http_code}' "$MAVEN_ARTIFACT_URL"
     assert_output '200'
 }

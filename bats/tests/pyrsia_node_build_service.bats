@@ -3,7 +3,7 @@
 # common setup
 COMMON_SETUP='common-setup'
 # docker compose file
-DOCKER_COMPOSE_DIR="$REPO_DIR/bats/tests/resources/docker/docker-compose_single_node.yml"
+DOCKER_COMPOSE_DIR="$REPO_DIR/bats/tests/resources/docker/docker-compose_node_1.yml"
 # maven build service mapping ID
 BUILD_SERVICE_MAVEN_MAPPING_ID="commons-codec:commons-codec:1.15"
 BUILD_SERVICE_DOCKER_MAPPING_ID="alpine:3.16"
@@ -33,7 +33,7 @@ setup() {
   # confirm the artifact is not already added to pyrsia node
   run "$PYRSIA_CLI" inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID
   refute_output --partial $BUILD_SERVICE_MAVEN_MAPPING_ID
-
+  # run "$PYRSIA_CLI" authorize --peer 12D3KooWKy4b2SZPDuukpRUyY3Cz52pyU4zDSv1GstX1UZC96Ryp
   # init the build
   run "$PYRSIA_CLI" build maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID
   assert_output --partial "successfully"
@@ -86,4 +86,3 @@ setup() {
   assert_output --partial $BUILD_SERVICE_DOCKER_MAPPING_ID
   echo -e "\t- Docker image built successfully - $BUILD_SERVICE_DOCKER_MAPPING_ID" >&3
 }
-

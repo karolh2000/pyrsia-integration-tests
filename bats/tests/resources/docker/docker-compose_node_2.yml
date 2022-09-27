@@ -4,11 +4,12 @@ services:
     build:
       context: .
       target: node_with_build_service
-    command: [/src/entrypoint_single_node_build_service.sh]
+    command: [/src/entrypoint_node_1.sh]
     stdin_open: true
     ports:
       - "8080:8080"
-      - "7888:7888"
+      - "7889:7889"
+      - "44001:44001"
     volumes:
       - "pyrsia:/tmp"
 

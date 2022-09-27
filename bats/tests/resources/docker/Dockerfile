@@ -12,6 +12,7 @@ RUN PATH="$HOME/.cargo/bin:$PATH" RUST_LOG=debug cargo build
 WORKDIR /src
 COPY entrypoint_bootstrap.sh entrypoint_single_node_build_service.sh ./
 RUN chmod +x ./*.sh
-RUN git clone https://github.com/pyrsia/pyrsia.git
+#RUN git clone https://github.com/pyrsia/pyrsia.git
+RUN git clone -b 1083-add-authorized-node https://github.com/erwin1/pyrsia.git
 WORKDIR /src/pyrsia
 RUN PATH="$HOME/.cargo/bin:$PATH" RUST_LOG=debug cargo build --package=pyrsia_node

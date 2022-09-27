@@ -123,3 +123,15 @@ setup() {
   assert_output --partial 'docker'
   assert_output --partial 'maven'
 }
+
+@test "Testing 'pyrsia authorize' help/options, check if the authorize help is shown." {
+  # run pyrsia inspect log help
+  run "$PYRSIA_CLI" authorize -h
+  # check if the INSPECT-LOG help is shown
+  assert_output --partial 'peer'
+
+  run "$PYRSIA_CLI" authorize
+  # check if the INSPECT-LOG help is shown
+  assert_output --partial 'peer'
+}
+

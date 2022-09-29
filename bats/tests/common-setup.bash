@@ -7,7 +7,7 @@ PYRSIA_TARGET_DIR=$PYRSIA_TEMP_DIR/target/release
 # check if the env clean up is enabled
 if [ -z "$CLEAN_UP_TEST_ENVIRONMENT" ]; then
   # if "true" then the temp files (pyrsia sources, binaries, etc.) and the docker images/containers are destroyed in "teardown_file" method.
-  CLEAN_UP_TEST_ENVIRONMENT=true
+  CLEAN_UP_TEST_ENVIRONMENT=false
 fi
 
 _common_setup() {
@@ -18,14 +18,15 @@ _common_setup() {
 
 _common_setup_file() {
   echo "Setting up the test environment..." >&3
-  local git_branch="main"
+  local repo="https://github.com/erwin1/pyrsia.git"
+  local git_branch="1083-add-authorized-node"
   # clone or update the sources
   if [ -d $PYRSIA_TEMP_DIR/.git ]; then
     git --git-dir=$PYRSIA_TEMP_DIR/.git fetch
-    git --git-dir=$PYRSIA_TEMP_DIR/.git --work-tree=$PYRSIA_TEMP_DIR merge origin/main
+    git --git-dir=$PYRSIA_TEMP_DIR/.git --work-tree=$PYRSIA_TEMP_DIR merge origin/$git_branch
   else
     mkdir -p $PYRSIA_TEMP_DIR
-    git clone --branch $git_branch https://github.com/pyrsia/pyrsia.git $PYRSIA_TEMP_DIR
+    git clone --branch $git_branch $repo $PYRSIA_TEMP_DIR
   fi
 
   echo "Building the Pyrsia CLI sources, it might take a while..." >&3
@@ -53,7 +54,7 @@ _common_setup_file() {
 
 _common_teardown_file() {
   unset BATS_TEST_TIMEOUT
-  echo "" >&3
+  echo " " >&3
   if [ "$CLEAN_UP_TEST_ENVIRONMENT" = true ]; then
     echo "Tearing down the tests environment..." >&3
     echo "Cleaning up the docker images and containers..."  >&3

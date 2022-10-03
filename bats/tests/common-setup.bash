@@ -7,7 +7,7 @@ PYRSIA_TARGET_DIR=$PYRSIA_TEMP_DIR/target/release
 # check if the env clean up is enabled
 if [ -z "$CLEAN_UP_TEST_ENVIRONMENT" ]; then
   # if "true" then the temp files (pyrsia sources, binaries, etc.) and the docker images/containers are destroyed in "teardown_file" method.
-  CLEAN_UP_TEST_ENVIRONMENT=true
+  CLEAN_UP_TEST_ENVIRONMENT=false
 fi
 
 _common_setup() {
@@ -18,8 +18,9 @@ _common_setup() {
 
 _common_setup_file() {
   echo "Setting up the test environment..." >&3
-  local git_repo="https://github.com/pyrsia/pyrsia.git"
-  local git_branch="main"
+  # local git_repo="https://github.com/pyrsia/pyrsia.git"
+  local git_repo="https://github.com/fishseabowl/pyrsia.git"
+  local git_branch="bc_1135_bug"
   # clone or update the sources
   if [ -d $PYRSIA_TEMP_DIR/.git ]; then
     git --git-dir=$PYRSIA_TEMP_DIR/.git fetch

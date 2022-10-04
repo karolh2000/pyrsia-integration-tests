@@ -4,11 +4,6 @@
 PYRSIA_TEMP_DIR=/tmp/pyrsia_tests/pyrsia
 # the pyrsia binaries
 PYRSIA_TARGET_DIR=$PYRSIA_TEMP_DIR/target/release
-# check if the env clean up is enabled
-if [ -z "$CLEAN_UP_TEST_ENVIRONMENT" ]; then
-  # if "true" then the temp files (pyrsia sources, binaries, etc.) and the docker images/containers are destroyed in "teardown_file" method.
-  CLEAN_UP_TEST_ENVIRONMENT=true
-fi
 
 _common_setup() {
   # load the bats "extensions"
@@ -72,6 +67,11 @@ _common_teardown_file() {
 # add authorized node
 _set_node_as_authorized() {
   PEER_ID=""
+  # check if the env clean up is enabled
+  if [ -z "$CLEAN_UP_TEST_ENVIRONMENT" ]; then
+    # if "true" then the temp files (pyrsia sources, binaries, etc.) and the docker images/containers are destroyed in "teardown_file" method.
+    CLEAN_UP_TEST_ENVIRONMENT=true
+  fi
   local node_hostname=$1;
   # wait until the node is ready (the node services are defined in pyrsia-integration-tests/bats/tests/resources/docker/docker-compose_auth_nodes.yml)
   # shellcheck disable=SC2034

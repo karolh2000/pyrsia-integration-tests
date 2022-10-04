@@ -51,6 +51,8 @@ _common_setup_file() {
 _common_teardown_file() {
   unset BATS_TEST_TIMEOUT
   echo " " >&3
+  # check if the env clean up is enabled
+  CLEAN_UP_TEST_ENVIRONMENT=true
   # docker-compose -f "$DOCKER_COMPOSE_PATH" logs >&3
   if [ "$CLEAN_UP_TEST_ENVIRONMENT" = true ]; then
     echo "Tearing down the tests environment..." >&3
@@ -67,8 +69,6 @@ _common_teardown_file() {
 # add authorized node
 _set_node_as_authorized() {
   PEER_ID=""
-  # check if the env clean up is enabled
-  CLEAN_UP_TEST_ENVIRONMENT=true
   local node_hostname=$1;
   # wait until the node is ready (the node services are defined in pyrsia-integration-tests/bats/tests/resources/docker/docker-compose_auth_nodes.yml)
   # shellcheck disable=SC2034

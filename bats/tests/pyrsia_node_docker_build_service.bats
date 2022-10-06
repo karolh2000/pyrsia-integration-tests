@@ -4,8 +4,13 @@
 COMMON_SETUP='common-setup'
 # docker compose file
 DOCKER_COMPOSE_DIR="$REPO_DIR/bats/tests/resources/docker/docker-compose_auth_nodes.yml"
+# pyrsia node docker registry URL
+NODE_DOCKER_REGISTRY="https://hub.docker.com/v2/users/login/" //TODO UPDATE IT to local node
+# docker image tag info
+NODE_DOCKER_IMAGE_NAME="alpine"
+NODE_DOCKER_IMAGE_TAG="3.16"
 # docker mapping id
-BUILD_SERVICE_DOCKER_MAPPING_ID="alpine:3.16"
+BUILD_SERVICE_DOCKER_MAPPING_ID="$NODE_DOCKER_IMAGE_NAME:$NODE_DOCKER_IMAGE_TAG"
 
 setup_file() {
   load $COMMON_SETUP
@@ -55,3 +60,26 @@ setup() {
   assert_output --partial $BUILD_SERVICE_DOCKER_MAPPING_ID
   echo -e "\t- Docker image built successfully - $BUILD_SERVICE_DOCKER_MAPPING_ID" >&3
 }
+
+@test "Testing the build service, docker (download docker image, inspect-log)." {
+  #set fake username and password
+  USERNAME="test_user"
+  PASSWORD="test_password"
+
+  local image_exists=false;
+  for i in {0..20}
+  do
+    # set token
+    TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${USERNAME}'", "password": "'${PASSWORD}'"}' $NODE_DOCKER_REGISTRY | jq -r .token)
+    # query the registry
+    local result=$(curl --silent -f --head -lL https://hub.docker.com/v2/repositories/$1/tags/$2/ > /dev/null)
+
+    if ! result; then
+      image_exists=true
+      break
+    fi
+
+    sleep 5
+  done
+}
+

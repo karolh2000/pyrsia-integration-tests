@@ -55,3 +55,33 @@ setup() {
   assert_output --partial $BUILD_SERVICE_MAVEN_MAPPING_ID
   echo -e "\t- Maven build successful - $BUILD_SERVICE_MAVEN_MAPPING_ID" >&3
 }
+
+@test "Testing artifactory download from the pyrsia node, maven." {
+    # init the build
+    run "$PYRSIA_CLI" build maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID
+
+    # waiting until the build is done => inspect logs available
+    echo -e "\t- Adding $BUILD_SERVICE_MAVEN_MAPPING_ID to the pyrsia node, it might take a while..." >&3
+
+    # shellcheck disable=SC2034
+    for i in {0..40}
+    do
+      inspect_log=$($PYRSIA_CLI inspect-log maven --gav $BUILD_SERVICE_MAVEN_MAPPING_ID)
+      if [[ "$inspect_log" == *"$BUILD_SERVICE_MAVEN_MAPPING_ID"* ]]; then
+        break
+      fi
+      sleep 5
+    done
+    #check if the logs contains the artifact info
+    run echo "$inspect_log"
+    assert_output --partial "$BUILD_SERVICE_MAVEN_MAPPING_ID"
+
+    # false negative, try to download non existing maven artifact
+    echo -e "\t- Test downloading a non existing artifactory from the pyrsia node" >&3
+    run curl -o /dev/null --silent -Iw '%{http_code}' "$MAVEN_ARTIFACT_URL_FAKE"
+    refute_output --partial '200'
+
+    echo -e "\t- Test downloading $BUILD_SERVICE_MAVEN_MAPPING_ID artifact from the pyrsia node - $MAVEN_ARTIFACT_URL" >&3
+    run curl -o /dev/null --silent -Iw '%{http_code}' "$MAVEN_ARTIFACT_URL"
+    assert_output '200'
+}

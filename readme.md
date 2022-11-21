@@ -75,6 +75,8 @@ The docker images and containers have to be removed manually if CLEAN_UP_TEST_EN
 tests also create the temp directory `/tmp/pyrsia_tests`which is not removed by the tests framework and if necessary has to be removed
 manually.
 
+Note: `CLEAN_UP_TEST_ENVIRONMENT=false` is not recommended because it impacts the tests environment and can lead to random failures. 
+
 ## Troubleshooting
 
 In case of any problems with the tests environment reset the enviroment as follow:

@@ -9,11 +9,11 @@ a simple way to verify that the UNIX programs you write behave as expected.
 - The tests are located in `$REPO_DIR/bats/tests`.
 - List of the Bats dependencies used in the tests:
 
-| Bats lib     | path  | repository |
-|--------------|-------|------------|
-| bats-core    | bats/lib/bats   | <https://github.com/bats-core/bats-core.git> |
+| Bats lib     | path                              | repository                                      |
+|--------------|-----------------------------------|-------------------------------------------------|
+| bats-core    | bats/lib/bats                     | <https://github.com/bats-core/bats-core.git>    |
 | bats-support | bats/lib/test_helper/bats-support | <https://github.com/bats-core/bats-support.git> |
-| bats-assert  | bats/lib/test_helper/bats-assert   | <https://github.com/bats-core/bats-assert.git> |
+| bats-assert  | bats/lib/test_helper/bats-assert  | <https://github.com/bats-core/bats-assert.git>  |
 
 - Supported platforms: Linux (x86), macOs (x86, m1), windows (WSL)
 - Linter (github actions):  [ShellCheck](https://www.shellcheck.net)/[Shell Linter](https://github.com/azohra/shell-linter)
@@ -79,7 +79,7 @@ Note: `CLEAN_UP_TEST_ENVIRONMENT=false` is not recommended because it impacts th
 
 ## Troubleshooting
 
-In case of any problems with the tests environment reset the enviroment as follow:
+In case of any problems with the tests environment reset the environment as follows:
 1) Remove all docker images and containers:
    ```sh
       docker system prune --all

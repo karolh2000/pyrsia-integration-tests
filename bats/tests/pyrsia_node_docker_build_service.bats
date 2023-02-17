@@ -3,7 +3,8 @@
 # common setup
 COMMON_SETUP='common-setup'
 # docker compose file
-DOCKER_COMPOSE_DIR="$REPO_DIR/bats/tests/resources/docker/docker-compose_auth_nodes.yml"
+DOCKERFILE_CONTEXT_DIR="$REPO_DIR/bats/tests/resources/docker"
+DOCKER_COMPOSE_DIR="$DOCKERFILE_CONTEXT_DIR/docker-compose_auth_nodes.yml"
 # docker image tag info
 NODE_DOCKER_IMAGE_NAME="alpine"
 NODE_DOCKER_IMAGE_TAG="3.16"
@@ -17,7 +18,7 @@ CLIENT_HOSTNAME="localhost:7888"
 
 setup_file() {
   load $COMMON_SETUP
-  _common_setup_file "$DOCKER_COMPOSE_DIR"
+  _common_setup_file "$DOCKER_COMPOSE_DIR" "$DOCKERFILE_CONTEXT_DIR"
 }
 
 teardown_file() {

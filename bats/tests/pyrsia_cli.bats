@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 COMMON_SETUP='common-setup'
-
-DOCKER_COMPOSE_DIR="$REPO_DIR/bats/tests/resources/docker/docker-compose_bootstrap.yml"
+DOCKERFILE_CONTEXT_DIR="$REPO_DIR/bats/tests/resources/docker"
+DOCKER_COMPOSE_DIR="$DOCKERFILE_CONTEXT_DIR/docker-compose_bootstrap.yml"
 
 # Individual tests should timeout after 3 minutes
 export BATS_TEST_TIMEOUT=60
 
 setup_file() {
   load $COMMON_SETUP
-  _common_setup_file "$DOCKER_COMPOSE_DIR"
+  _common_setup_file "$DOCKER_COMPOSE_DIR" "$DOCKERFILE_CONTEXT_DIR"
 }
 
 teardown_file() {

@@ -41,12 +41,16 @@ _common_setup_file() {
   log INFO "For more details, refer to https://github.com/pyrsia/pyrsia/commit/$(echo "${latest_commit}" | awk '{print $1}') (This link works properly only when you test pyrsia/pyrsia repository.)"
 
   echo "Building the Pyrsia CLI sources (Pyrsia CLI source dir: $PYRSIA_TEMP_DIR), it might take a while..." >&3
-  cargo build -q --profile=release --package=pyrsia_cli --manifest-path=$PYRSIA_TEMP_DIR/Cargo.toml
-  echo "Building Pyrsia CLI completed!" >&3
+  cargo build -q --profile=release --package=pyrsia_cli --package=pyrsia_node --manifest-path=$PYRSIA_TEMP_DIR/Cargo.toml
+  echo "Building Pyrsia CLI and NODE completed!" >&3
   echo "Building the Pyrsia node docker image and starting the container, it might take a while..." >&3
   DOCKER_COMPOSE_PATH=$1;
+  DOCKERFILE_CONTEXT_DIR=$2;
+  log DEBUG "Copy pyrsia binaries to the docker context from ${PYRSIA_TARGET_DIR} to ${DOCKERFILE_CONTEXT_DIR}"
+  cp "$PYRSIA_TARGET_DIR/pyrsia" $DOCKERFILE_CONTEXT_DIR
+  cp "$PYRSIA_TARGET_DIR/pyrsia_node" $DOCKERFILE_CONTEXT_DIR
   log DEBUG "Building the docker test image, docker-compose file: ${DOCKER_COMPOSE_PATH}"
-  docker-compose -f "$DOCKER_COMPOSE_PATH" build --build-arg GIT_BRANCH="${GIT_BRANCH}" --build-arg GIT_REPO="${GIT_REPO}"
+  docker-compose -f "$DOCKER_COMPOSE_PATH" build
   log DEBUG "Starting the test docker containers, docker-compose file: ${DOCKER_COMPOSE_PATH}"
   docker-compose -f "$DOCKER_COMPOSE_PATH" up -d --no-build
   sleep 10
@@ -81,6 +85,8 @@ _common_teardown_file() {
   if [ "$CLEAN_UP_TEST_ENVIRONMENT" = true ]; then
     echo "Tearing down the tests environment..." >&3
     echo "Cleaning up the docker images and containers..."  >&3
+    rm -rf "$DOCKERFILE_CONTEXT_DIR/pyrsia"
+    rm -rf "$DOCKERFILE_CONTEXT_DIR/pyrsia_node"
     docker-compose -f "$DOCKER_COMPOSE_PATH" down --rmi all
   else
     echo "Stopping the docker containers..." >&3

@@ -30,8 +30,8 @@ if [ -z "$BOOTADDR" ] || [ "$BOOTADDR" == "null" ]; then
 fi
 
 # debug
-echo "NODE START COMMAND: /src/pyrsia/target/debug/pyrsia_node -P $BOOTADDR --host 0.0.0.0 --listen /ip4/0.0.0.0/tcp/44000"
+echo "NODE START COMMAND: /src/pyrsia_node -P $BOOTADDR --host 0.0.0.0 --listen /ip4/0.0.0.0/tcp/44000"
 
 # start the pyrsia node (no bootstrap, peer it to   auth_node_with_build_service node)
-chmod +x /src/pyrsia/target/debug/pyrsia_node
-RUST_LOG=pyrsia=debug /src/pyrsia/target/debug/pyrsia_node "$@" -P "$BOOTADDR" --host 0.0.0.0 --listen /ip4/0.0.0.0/tcp/44000
+chmod +x /src/pyrsia_node
+RUST_LOG=pyrsia=debug /src/pyrsia_node "$@" -P "$BOOTADDR" --host 0.0.0.0 --listen /ip4/0.0.0.0/tcp/44000
